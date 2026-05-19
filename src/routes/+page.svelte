@@ -10,7 +10,7 @@
     Your modern learning platform. Explore courses, track progress, and grow your skills.
   </p>
   <div class="mt-8 flex gap-4">
-    <Button href="/auth/register">Get Started</Button>
-    <Button href="/auth/login" variant="outline">Sign In</Button>
+    <Button href="/auth/login">Sign In</Button>
+    <Button href="/auth/register" variant="outline">Get Started</Button>
   </div>
 </section>

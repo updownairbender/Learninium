@@ -6,29 +6,34 @@
   <h1 class="text-4xl font-bold text-text">Browse Courses</h1>
 
   <form method="GET" action="/search" class="mt-6 flex flex-wrap gap-4">
-    <input
-      name="q"
-      type="text"
-      value={data.q}
-      placeholder="Search courses..."
-      class="min-w-0 flex-1 rounded-button border border-border bg-surface px-4 py-3 text-text outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
-    />
-    <select
-      name="category"
-      value={data.category}
-      class="rounded-button border border-border bg-surface px-4 py-3 text-text outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/20"
-    >
-      <option value="">All categories</option>
+    <div class="flex w-full flex-wrap gap-2">
+      <a href="/search" class="rounded-button px-3 py-1.5 text-sm font-medium {!data.category ? 'bg-primary text-white' : 'bg-surface-alt text-text-muted'} transition-colors hover:bg-primary/20">
+        All
+      </a>
       {#each data.categories as cat}
-        <option value={cat}>{cat}</option>
+        <a
+          href="/search?category={cat}"
+          class="rounded-button px-3 py-1.5 text-sm font-medium {data.category === cat ? 'bg-primary text-white' : 'bg-surface-alt text-text-muted'} transition-colors hover:bg-primary/20"
+        >
+          {cat}
+        </a>
       {/each}
-    </select>
-    <button
-      type="submit"
-      class="rounded-button bg-primary px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-primary-hover"
-    >
-      Search
-    </button>
+    </div>
+    <div class="flex w-full gap-3">
+      <input
+        name="q"
+        type="text"
+        value={data.q}
+        placeholder="Search courses..."
+        class="min-w-0 flex-1 rounded-button border border-border bg-surface px-4 py-3 text-text outline-none transition-colors placeholder:text-text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
+      />
+      <button
+        type="submit"
+        class="cursor-pointer rounded-button bg-primary px-6 py-3 font-medium text-white shadow-lg transition-all duration-200 hover:bg-primary-hover hover:shadow-xl active:scale-95"
+      >
+        Search
+      </button>
+    </div>
   </form>
 
   {#if data.courses.length > 0}

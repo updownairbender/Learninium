@@ -13,25 +13,23 @@
     <a href="/" class="text-2xl font-bold text-text">
       Learn<span class="text-primary">inium</span>
     </a>
-    <nav class="flex items-center gap-6">
-      <a href="/search" class="text-text-muted transition-colors hover:text-text">
-        Browse
-      </a>
+    <nav class="flex items-center gap-4">
       {#if session}
-        <a
-          href="/dashboard/{role}"
-          class="text-text-muted transition-colors hover:text-text"
-        >
+        <a href="/dashboard/{role}" class="text-sm text-text-muted transition-colors hover:text-text">
           {email}
         </a>
         <form method="POST" action="/auth/logout">
-          <button type="submit" class="rounded-button border border-border px-4 py-2 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-text">
+          <button type="submit" class="cursor-pointer rounded-button border border-border px-3 py-1.5 text-sm font-medium text-text-muted transition-colors hover:bg-surface-alt hover:text-text">
             Sign out
           </button>
         </form>
       {:else}
-        <Button href="/auth/login" variant="outline">Sign In</Button>
+        <a href="/auth/login" class="text-sm text-text-muted transition-colors hover:text-text">Sign in</a>
+        <Button href="/auth/register">Get Started</Button>
       {/if}
+      <a href="/search" class="rounded-button bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary transition-colors hover:bg-primary/20">
+        Browse
+      </a>
     </nav>
   </div>
 </header>

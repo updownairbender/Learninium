@@ -149,24 +149,30 @@ src/
 | DB access pattern | Server client in `load` functions | RLS enforced at DB level, no ORM overhead |
 | Component granularity | Medium-grained (no micro-files) | Each feature component is 1 file unless >400 lines |
 
-### Design Tokens (Tailwind v4 `@theme`)
+### Design Tokens (Tailwind v4 `@theme`) — Modern Violet
 
 ```css
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #4F46E5;     /* Indigo-600 — modern, trusted, universally liked */
-  --color-secondary: #F59E0B;   /* Amber-500 — warmth, energy, engagement */
-  --color-accent: #10B981;      /* Emerald-500 — fresh, growth, learning */
-  --color-surface: #FAFAF9;     /* Stone-50 — warm off-white, inviting */
-  --color-surface-alt: #F5F5F4; /* Stone-100 — warm light gray */
-  --color-text: #1C1917;        /* Stone-900 — warm dark */
-  --color-text-muted: #78716C;  /* Stone-500 — warm medium gray */
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-  --radius-button: 0.75rem;
-  --radius-card: 1rem;
+  --color-primary: #7C3AED;     /* Violet-600 — modern, creative */
+  --color-primary-hover: #6D28D9;
+  --color-secondary: #EC4899;   /* Pink-500 — playful energy */
+  --color-secondary-hover: #DB2777;
+  --color-accent: #14B8A6;      /* Teal-500 — fresh contrast */
+  --color-accent-hover: #0D9488;
+  --color-surface: #F8FAFC;     /* Slate-50 — clean light */
+  --color-surface-alt: #F1F5F9; /* Slate-100 */
+  --color-text: #0F172A;        /* Slate-900 */
+  --color-text-muted: #64748B;  /* Slate-500 */
+  --color-border: #E2E8F0;      /* Slate-200 */
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --radius-button: 0.625rem;
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-card-hover: 0 4px 12px -2px rgb(0 0 0 / 0.08);
 }
 ```
 
