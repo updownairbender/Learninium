@@ -2,15 +2,13 @@ import { error as kitError } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals: { supabase } }) => {
-  const { data: profile, error: profileError } = await supabase
+  const { data: profile, error: profileErr } = await supabase
     .from('profiles')
-    .select('*')
+    .select('id, name, bio, avatar_url')
     .eq('id', params.id)
     .single();
 
-  if (profileError || !profile) {
-    throw kitError(404, 'Teacher not found');
-  }
+  if (profileErr || !profile) throw kitError(404, 'Teacher not found');
 
   const { data: courses } = await supabase
     .from('courses')

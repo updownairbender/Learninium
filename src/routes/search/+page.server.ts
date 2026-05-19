@@ -11,12 +11,20 @@ export const load: PageServerLoad = async ({ url, locals: { supabase } }) => {
 
   const { data: courses } = await query.limit(50);
 
-  const { data: categories } = await supabase
+  const { data: cats } = await supabase
     .from('courses')
     .select('category')
     .not('category', 'is', null);
 
-  const uniqueCategories = [...new Set((categories ?? []).map(c => c.category).filter(Boolean))];
+  const uniqueCategories: string[] = [];
+  const seen = new Set<string>();
+  for (const c of cats ?? []) {
+    const cat = (c as any).category;
+    if (cat && !seen.has(cat)) {
+      seen.add(cat);
+      uniqueCategories.push(cat);
+    }
+  }
 
   return { courses: courses ?? [], categories: uniqueCategories, q, category };
 };

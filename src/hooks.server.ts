@@ -1,11 +1,12 @@
 import { createServerClient } from '@supabase/ssr';
 import { type Handle, type HandleServerError } from '@sveltejs/kit';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '$env/static/private';
 import { logger } from '$lib/server/logging/logger';
 
 export const handle: Handle = async ({ event, resolve }) => {
   event.locals.supabase = createServerClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY,
     {
       cookies: {
         getAll: () => event.cookies.getAll(),

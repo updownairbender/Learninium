@@ -15,7 +15,7 @@
 | Framework      | SvelteKit               | 2.60.1       | Svelte 5.55.8 (runes mode)                |
 | Styling        | Tailwind CSS            | 4.3.0        | CSS-first config (`@theme`), no PostCSS   |
 | Vite Plugin    | @tailwindcss/vite       | 4.3.0        | Bundled with Tailwind v4                  |
-| DB / Auth      | @supabase/supabase-js   | 2.106.0      | Passkey (WebAuthn) support                |
+| DB / Auth      | @supabase/supabase-js   | 2.106.0      | Email/password auth                       |
 | SSR Auth       | @supabase/ssr           | 0.10.3       | Cookie-based session for SvelteKit        |
 | Adapter        | @sveltejs/adapter-auto  | 7.0.1        | Deploys to Vercel / Cloudflare / Node      |
 | Code Quality   | svelte-check            | 4.4.8        | Type-checking *.svelte files              |
@@ -27,10 +27,10 @@
 
 ## [SYSTEM_FLOW]
 
-### Auth Flow (Passkeys via Supabase WebAuthn)
+### Auth Flow (Email/Password via Supabase Auth)
 
 ```
-User → [Auth Page] → Create Passkey → Supabase Auth → JWT Cookie → SvelteKit Hook
+User → [Login] → Sign in with Email/Password → Supabase Auth → JWT Cookie → SvelteKit Hook
    ↓
 [Session Valid?] → [hooks.server.ts: refresh session] → [route load: guard by role]
    ↓
@@ -75,16 +75,14 @@ src/
 │   ├── server/
 │   │   ├── db/
 │   │   │   └── index.ts        # Supabase server client factory
-│   │   ├── auth/
-│   │   │   └── guard.ts        # Role-based route guards
+│   │   └── auth/
+│   │       └── guard.ts        # Role-based route guards
 │   │   └── logging/
 │   │       └── logger.ts       # Async structured logger (file/console)
 │   │
 │   ├── client/
-│   │   ├── db/
-│   │   │   └── index.ts        # Supabase browser client singleton
-│   │   └── auth/
-│   │       └── passkey.ts      # Passkey register/authenticate helpers
+│   │   └── db/
+│   │       └── index.ts        # Supabase browser client singleton
 │   │
 │   ├── components/
 │   │   ├── ui/                 # Primitive components (Button, Card, Input, Modal, Skeleton)
@@ -105,9 +103,9 @@ src/
 │   │
 │   ├── auth/
 │   │   ├── login/
-│   │   │   └── +page.svelte    # Passkey login
+│   │   │   └── +page.svelte    # Email/password login
 │   │   ├── register/
-│   │   │   └── +page.svelte    # Registration + passkey creation
+│   │   │   └── +page.svelte    # Registration
 │   │   └── callback/
 │   │       └── +page.svelte    # OAuth/SSO callback handler
 │   │
@@ -200,9 +198,10 @@ Design:
 |-----------|--------|-----------|
 | **M1 — Foundation** | ✅ Done | `hooks.server.ts`, `hooks.client.ts`, `vite.config.ts`, `app.css`, `app.html` |
 | **M2 — Auth System** | ✅ Done | Auth pages (login/register/logout/callback), Dashboards (admin/teacher/student), Role guards, Session management |
-| **Passkey Flow** | ✅ Done | `$lib/client/auth/passkey.ts` — WebAuthn via Supabase `signInWithPasskey()` / `registerPasskey()`. Login page shows passkey-first UI. Register page offers passkey enrollment after account creation. Requires `auth.experimental.passkey: true` in Supabase project. |
+| **Passkey Flow** | ❌ Removed | Passkey (WebAuthn) authentication removed. Auth relies solely on email/password. Login page shows email/password form. Register page shows success message with link to login. |
 | **M3 — Content Pages** | ✅ Done | Course page, Teacher profile, Student profile, Search page (all with Supabase queries) |
 | **M4 — UX Polish** | ✅ Done | Page transitions (fly), Error boundary, Skeleton component, Custom scrollbar, Selection styling |
+| **Schema & Migration** | ✅ Done | `supabase/migrations/00001_initial_schema.sql` — profiles, courses, enrollments, RLS, triggers, indexes. `supabase/seed.sql` — dev seed data. `src/lib/types/supabase.ts` — Database type interface. |
 
 ### Build Status: `npm run build` + `npm run check` — 0 errors, 0 warnings
 
@@ -212,11 +211,11 @@ Design:
 
 | Item | Status | Action |
 |------|--------|--------|
-| Supabase schema & migration | Pending | Define tables: profiles (roles), courses, enrollments, categories. Run migration. |
-| Supabase project setting `auth.experimental.passkey: true` | Pending | Must be enabled in Supabase dashboard for passkey API to work |
-| RLS policies | Pending | Row-level security per role per table |
-| Seed data | Pending | Dev seed script for courses/teachers/students |
+| ~~Enable `auth.experimental.passkey: true` in Supabase project~~ | ❌ Removed | Passkey auth removed; no longer needed |
+| Run migration against Supabase project | Pending | Paste `supabase/migrations/00001_initial_schema.sql` into SQL Editor or: `supabase link --project-ref xxx` then `supabase db push` |
+| Run seed data | Pending | `supabase/seed.sql` — insert sample courses/teachers |
+| Generate Supabase TypeScript types from live DB | Pending | `supabase gen types typescript --linked > src/lib/types/supabase.ts` (requires `supabase link` first) |
+| `pg_trgm` extension | Pending | Enable via Supabase SQL Editor: `create extension if not exists "pg_trgm";` — needed for course title fuzzy search |
 | E2E tests | Pending | Playwright for auth flows |
 | Accessibility audit | Pending | Keyboard nav, screen reader, contrast |
 | Deployment config | Pending | Vercel + Supabase project link, env vars |
-| Supabase TypeScript types | Pending | Run `supabase gen types typescript --linked` for full type safety |

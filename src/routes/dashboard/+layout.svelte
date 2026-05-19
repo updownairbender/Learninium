@@ -26,7 +26,7 @@
       {/each}
       <hr class="my-4 border-border" />
       <form method="POST" action="/auth/logout">
-        <button type="submit" class="w-full rounded-button px-4 py-2 text-left text-sm font-medium text-error transition-colors hover:bg-error/10">
+        <button type="submit" class="w-full cursor-pointer rounded-button px-4 py-2 text-left text-sm font-medium text-error transition-colors hover:bg-error/10">
           Sign out
         </button>
       </form>
